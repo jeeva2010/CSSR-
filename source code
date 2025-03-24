@@ -1,0 +1,49 @@
+#include <Wire.h>
+#include "rgb_lcd.h"
+
+#define Sensor 2
+
+rgb_lcd lcd;
+
+void setup() {
+  // Initialize the motion sensor pin
+  pinMode(Sensor, INPUT);
+  
+  // Initialize the LCD
+  lcd.begin(16, 2);   // Start the LCD with 16 columns and 2 rows
+  lcd.setRGB(0, 255, 0);   // Set backlight color to green
+  
+  // Initialize Serial communication for debugging (optional)
+  Serial.begin(9600);
+
+  // Display initial message
+  lcd.print("System Ready");
+}
+
+void loop() {
+  // Read the state of the motion sensor
+  bool Detection = digitalRead(Sensor);
+
+  // Check if motion is detected
+  if (Detection == HIGH) {
+    lcd.clear();  // Clear the previous message
+    lcd.setCursor(0, 0);   // Set the cursor to the first line
+    lcd.print("Motion Detected!");
+    lcd.setRGB(255, 0, 0);  // Change the backlight color to red
+    
+    // Optional: Also print to Serial Monitor
+    Serial.println("Motion detected !!");
+  } 
+  else {
+    lcd.clear();  // Clear the previous message
+    lcd.setCursor(0, 0);   // Set the cursor to the first line
+    lcd.print("Clear");
+    lcd.setRGB(0, 255, 0);  // Change the backlight color to green
+    
+    // Optional: Also print to Serial Monitor
+    Serial.println("Clear");
+  }
+
+  // Add a short delay to avoid too rapid updates
+  delay(500);
+}
